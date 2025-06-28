@@ -1,10 +1,15 @@
 const axios = require('axios');
 
 module.exports = async (req, res) => {
-  if (req.method !== 'POST') {
-    res.status(405).json({ error: 'Method not allowed' });
+  // CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-openai-key');
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
     return;
   }
+
   const { message, sessionId } = req.body;
   // Prefer API key from header, fallback to env
   const apiKey = req.headers['x-openai-key'] || process.env.OPENAI_API_KEY;
