@@ -1,6 +1,26 @@
 const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
 
 module.exports = async (req, res) => {
+  // Serve static files if requested
+  if (req.method === 'GET' && req.url) {
+    if (req.url.endsWith('echo5-chat-hybrid.js')) {
+      const filePath = path.join(__dirname, '../public/echo5-chat-hybrid.js');
+      res.setHeader('Content-Type', 'application/javascript');
+      return fs.promises.readFile(filePath)
+        .then(data => res.status(200).send(data))
+        .catch(() => res.status(404).send('Not found'));
+    }
+    if (req.url.endsWith('echo5-chat-style.css')) {
+      const filePath = path.join(__dirname, '../public/echo5-chat-style.css');
+      res.setHeader('Content-Type', 'text/css');
+      return fs.promises.readFile(filePath)
+        .then(data => res.status(200).send(data))
+        .catch(() => res.status(404).send('Not found'));
+    }
+  }
+
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-openai-key');
