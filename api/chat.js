@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const { message, sessionId } = req.body || {};
+    const { message, sessionId, systemPrompt, faq } = req.body || {};
     const apiKey = req.headers['x-openai-key'] || process.env.OPENAI_API_KEY;
     if (!apiKey) {
       return res.status(400).json({ reply: 'OpenAI API key not provided.' });
@@ -18,12 +18,16 @@ module.exports = async (req, res) => {
     if (!message) {
       return res.status(400).json({ reply: 'No message provided.' });
     }
+    let systemContent = systemPrompt || 'You are a helpful assistant.';
+    if (faq) {
+      systemContent += '\n\nKnowledge Base:\n' + faq;
+    }
     const openaiRes = await axios.post(
       'https://api.openai.com/v1/chat/completions',
       {
         model: 'gpt-3.5-turbo',
         messages: [
-          { role: 'system', content: 'You are a helpful assistant.' },
+          { role: 'system', content: systemContent },
           { role: 'user', content: message }
         ]
       },
