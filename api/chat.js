@@ -1,9 +1,6 @@
 const axios = require('axios');
-const fs = require('fs');
-const path = require('path');
 
-
-
+module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-openai-key');
@@ -47,4 +44,4 @@ const path = require('path');
     console.error('OpenAI API error:', error.response?.data || error.message);
     res.status(500).json({ reply: 'Sorry, there was an error processing your request.' });
   }
-;
+};
