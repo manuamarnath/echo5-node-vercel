@@ -11,7 +11,13 @@ module.exports = async (req, res) => {
 
   try {
     const { message, sessionId, systemPrompt, faq } = req.body || {};
-    const apiKey = req.headers['x-openai-key'] || process.env.OPENAI_API_KEY;
+
+    // Fetch the OpenAI API key from your WordPress REST endpoint
+    const wpKeyRes = await axios.get('https://YOUR-WORDPRESS-SITE.com/wp-json/echo5-chatbot/v1/openai-key', {
+      headers: { 'X-Chatbot-Secret': process.env.CHATBOT_SECRET_TOKEN }
+    });
+    const apiKey = wpKeyRes.data.openai_key;
+
     if (!apiKey) {
       return res.status(400).json({ reply: 'OpenAI API key not provided.' });
     }
