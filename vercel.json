@@ -2,8 +2,8 @@
   "version": 2,
   "builds": [
     { "src": "api/chat.js", "use": "@vercel/node" },
-     { "src": "/public", "dest": "/public/echo5-chat-hybrid.js" },
-    { "src": "/public", "dest": "/public/echo5-chat-style.css" }
+    { "src": "/public/echo5-chat--hybrid.js", "use": "@vercel/node" },
+    { "src": "/public/echo5-chat--style.css", "use": "@vercel/node" }
   ],
   "routes": [
     { "handle": "filesystem" },
